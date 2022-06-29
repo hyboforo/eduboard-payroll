@@ -28,7 +28,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Employee {
     
     @Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
+    public static final String SEQUENCE_NAME = "employee_sequence";
 
     @Id
     private long id;
