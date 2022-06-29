@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class PaySlipDto {
     
     private long Id;
-    private Date date;
+    private String date;
     private double tireOneContribution;
     private double tierTwoContribution;
     private double tierThreeContribution;

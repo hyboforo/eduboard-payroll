@@ -29,7 +29,7 @@ public class PaySlip {
 
     @Id
     private long Id;
-    private Date date;
+    private String date;
     @Field("tier1_contribution")
     private double tireOneContribution;
     @Field("tier2_contribution")

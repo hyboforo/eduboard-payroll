@@ -6,7 +6,6 @@
 package com.tarya.eduboard.service;
 
 import com.tarya.eduboard.dto.PayDetailsDto;
-import com.tarya.eduboard.model.PayDetails;
 import java.util.List;
 
 /**

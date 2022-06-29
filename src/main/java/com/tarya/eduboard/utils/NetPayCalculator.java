@@ -5,6 +5,9 @@
  */
 package com.tarya.eduboard.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author hybof
@@ -21,7 +24,8 @@ public class NetPayCalculator {
      * @param payeeRate deductions for payee
      * @return 
      */
-    public double returnNetPay(double grossPay, int tier1Rate, int tier2Rate, int tier3Rate, int payeeRate){
+    public static Map<String, Double> returnDeductionsAndNetPay(double grossPay, int tier1Rate, int tier2Rate, int tier3Rate, int payeeRate){
+        Map<String, Double> deductionsAndNetPay =  new HashMap<String, Double>();
         double temp = grossPay;
         double payeeAmount = 0;
         double tier1Amount = 0;
@@ -35,7 +39,14 @@ public class NetPayCalculator {
         temp = temp - tier3Amount;
         payeeAmount = temp * (payeeRate/100);
         temp = temp - payeeAmount;
-        return temp;   
+        double totalDeductions = tier1Amount + tier2Amount + tier3Amount + payeeAmount; 
+        deductionsAndNetPay.put("tier1", tier1Amount);
+        deductionsAndNetPay.put("tier2", tier2Amount);
+        deductionsAndNetPay.put("tier3", tier3Amount);
+        deductionsAndNetPay.put("payee", payeeAmount);
+        deductionsAndNetPay.put("totalDeductions", totalDeductions);
+        deductionsAndNetPay.put("netPay", temp);
+        return deductionsAndNetPay;   
     }
     
 }

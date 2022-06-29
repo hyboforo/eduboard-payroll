@@ -45,14 +45,14 @@ public class PayDetailsServiceImpl implements PayDetailsService{
 
     @Override
     public List<PayDetailsDto> getAllPayDetails() {
-        List<PayDetailsDto> payDetails = DtoMapper.toDtoList(payDetailsRepository.findAll(), PayDetailsDto.class);
-        return payDetails;
+        List<PayDetailsDto> payDetailDtos = DtoMapper.toDtoList(payDetailsRepository.findAll(), PayDetailsDto.class);
+        return payDetailDtos;
     }
 
     @Override
     public PayDetailsDto getPayDetailsByEmployeeId(long Id) {
-       PayDetailsDto payDetail = DtoMapper.toDto(payDetailsRepository.findById(Id), PayDetailsDto.class);
-        return payDetail; 
+       PayDetailsDto payDetailDto = DtoMapper.toDto(payDetailsRepository.findById(Id), PayDetailsDto.class);
+        return payDetailDto; 
     }
     
 }

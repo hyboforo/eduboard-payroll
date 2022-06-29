@@ -5,7 +5,7 @@
  */
 package com.tarya.eduboard.service;
 
-import com.tarya.eduboard.model.PaySlip;
+import com.tarya.eduboard.dto.PaySlipDto;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ import java.util.List;
  * @author hybof
  */
 public interface PaySlipService {
-    PaySlip createPaySlip(PaySlip newPaySlip);
-    List<PaySlip> getAllPaySlips();
-    PaySlip getPaySlipByEmployeeId(long Id);
+    PaySlipDto createPaySlip(long Id);
+    List<PaySlipDto> getAllPaySlips();
+    PaySlipDto getPaySlipByEmployeeId(long Id);
 }
