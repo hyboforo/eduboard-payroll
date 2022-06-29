@@ -5,6 +5,7 @@
  */
 package com.tarya.eduboard.service;
 
+import com.tarya.eduboard.dto.PayDetailsDto;
 import com.tarya.eduboard.model.PayDetails;
 import java.util.List;
 
@@ -12,10 +13,10 @@ import java.util.List;
  *
  * @author hybof
  */
-public interface payDetailsService {
+public interface PayDetailsService {
     
-    PayDetails createPayDetails(PayDetails newPayDetails);
-    List<PayDetails> getAllPayDetails ();
-    PayDetails getPayDetailsByEmployeeId(long Id);
+    PayDetailsDto createPayDetails(PayDetailsDto newPayDetails);
+    List<PayDetailsDto> getAllPayDetails ();
+    PayDetailsDto getPayDetailsByEmployeeId(long Id);
     
 }
