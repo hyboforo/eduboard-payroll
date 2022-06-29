@@ -5,27 +5,30 @@
  */
 package com.tarya.eduboard.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Data transport object class to decouple the data sent to a caller from our applicant entity
- * for this example, the DTO is identical to the actually entity class
+ * Data access class for returning employee pay slips
  * @author hybof
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDto {
+public class EmployeePaySlipDto {
     
-    private long id;
+    private Date date;
     private String firstName;
     private String lastName;
-    private String email;
-    private String role;
-
+    private double tireOneContribution;
+    private double tierTwoContribution;
+    private double tierThreeContribution;
+    private double totalDeductions;
+    private double netSalary;
+    
+    
     
 }

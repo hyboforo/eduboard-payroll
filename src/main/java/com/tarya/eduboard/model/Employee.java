@@ -47,6 +47,6 @@ public class Employee {
     // custome toString method for returning of data 
     @Override
     public String toString() {
-        return "Applicant [id:" + id + ", First Name:" + firstName + ", Last Name:" + lastName + ", Email:" + email + ", Role:" + role + "]";
+        return "Employee [id:" + id + ", First Name:" + firstName + ", Last Name:" + lastName + ", Email:" + email + ", Role:" + role + "]";
     }
 }

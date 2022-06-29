@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.tarya.eduboard.service.EmployeeService;
+import com.tarya.eduboard.utils.Response;
 
 /**
  *
@@ -54,11 +55,11 @@ public class EmployeeController {
     }
     
     @GetMapping("/deleteEmployee/{id}")
-    public String deleteEmployee(@PathVariable("id") long Id){
+    public Response deleteEmployee(@PathVariable("id") long Id){
         if(employeeService.deleteEmployee(Id)){
-            return "Employee with ID "+ Id +" has been deleted";
+            return Response.SUCCESSFUL;
         }else{
-            return "Failed to delete Employee with ID "+ Id;
+            return Response.FAILED;
         }
         
     }
