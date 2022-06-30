@@ -28,7 +28,7 @@ public class PaySlip {
     public static final String SEQUENCE_NAME = "pay_slip_sequence";
 
     @Id
-    private long Id;
+    private long id;
     private String date;
     @Field("tier1_contribution")
     private double tireOneContribution;
@@ -36,6 +36,8 @@ public class PaySlip {
     private double tierTwoContribution;
     @Field("tier3_contribution")
     private double tierThreeContribution;
+    @Field("payee_contribution")
+    private double payeeContributions;
     @Field("total_dediuctions")
     private double totalDeductions;
     @Field("net_pay")

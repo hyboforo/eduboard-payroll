@@ -11,20 +11,23 @@ import lombok.NoArgsConstructor;
 
 /**
  * Data access class for PayDetails
+ *
  * @author hybof
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PayDetailsDto {
-    
+
     private long id;
+    private long employeeId;
+    private String employeeFirstName;
+    private String employeeLastName;
     private double grossSalary;
     private int payeeRate;
-    private int tierRate;
+    private int tierOneRate;
     private int tierTwoRate;
     private int tierThreeRate;
-    private long employeeId;
     private String bank;
-    
+
 }

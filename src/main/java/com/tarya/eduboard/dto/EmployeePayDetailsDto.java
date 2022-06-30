@@ -26,5 +26,6 @@ public class EmployeePayDetailsDto {
     private int tierTwoRate;
     private int tierThreeRate;
     private String bank;
+    private long employeeId;
     
 }

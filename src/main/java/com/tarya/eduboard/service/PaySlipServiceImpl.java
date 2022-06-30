@@ -5,7 +5,7 @@
  */
 package com.tarya.eduboard.service;
 
-import com.tarya.eduboard.dto.EmployeePayDetailsDto;
+import com.tarya.eduboard.dto.EmployeeDto;
 import com.tarya.eduboard.dto.PayDetailsDto;
 import com.tarya.eduboard.dto.PaySlipDto;
 import com.tarya.eduboard.model.PaySlip;
@@ -24,11 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author hybof
  */
-
 @Slf4j
 @Service
-public class PaySlipServiceImpl implements PaySlipService{
-    
+public class PaySlipServiceImpl implements PaySlipService {
+
     @Autowired
     private PaySlipRepository paySlipRepository;
     @Autowired
@@ -40,25 +39,16 @@ public class PaySlipServiceImpl implements PaySlipService{
 
     @Transactional
     @Override
-    public PaySlipDto createPaySlip(long Id) {
-        PaySlip paySlip = new PaySlip();
+    public PaySlipDto createPaySlip(long employeeId) {
         PaySlipDto savedPaySlip = null;
-
-        PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(Id);
-        Map<String, Double> returnDeductionsAndNetPay = NetPayCalculator.returnDeductionsAndNetPay(employeePayDetails.getGrossSalary(), employeePayDetails.getTierRate(), employeePayDetails.getTierTwoRate(), 
-                employeePayDetails.getTierThreeRate(), employeePayDetails.getPayeeRate());
+        PaySlipServiceImpl paysePaySlipServiceImpl = new PaySlipServiceImpl();
+        PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(employeeId);
+        PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails, employeeId);
         paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
-        paySlip.setDate(FormatDate.returnFormatedDate());
-        paySlip.setEmployeeId(Id);
-        paySlip.setTireOneContribution(returnDeductionsAndNetPay.get("tier1"));
-        paySlip.setTierTwoContribution(returnDeductionsAndNetPay.get("tier2"));
-        paySlip.setTierThreeContribution(returnDeductionsAndNetPay.get("tier3"));
-        paySlip.setTotalDeductions(returnDeductionsAndNetPay.get("totalDeductions"));
-        paySlip.setNetSalary(returnDeductionsAndNetPay.get("netPay"));
-        try{
+        try {
             savedPaySlip = DtoMapper.toDto(paySlipRepository.save(paySlip), PaySlipDto.class);
-        }catch(Exception ex){
-            log.error("Failed to save Pay Slip "+ex.getLocalizedMessage());
+        } catch (Exception ex) {
+            log.error("Failed to save Pay Slip " + ex.getLocalizedMessage());
         }
         return savedPaySlip;
     }
@@ -71,9 +61,42 @@ public class PaySlipServiceImpl implements PaySlipService{
 
     @Override
     public PaySlipDto getPaySlipByEmployeeId(long Id) {
-        PaySlipDto paySlipDto = DtoMapper.toDto(paySlipRepository.findById(Id), PaySlipDto.class);
+        PaySlipDto paySlipDto = DtoMapper.toDto(paySlipRepository.findBy(Id), PaySlipDto.class);
         return paySlipDto;
     }
 
-    
+    @Override
+    public List<PaySlipDto> createPaySlips() {
+        List<EmployeeDto> allEmployees = employeeService.getAllEmployees();
+        for (EmployeeDto allEmployee : allEmployees) {
+            log.info("Employee ID is " + allEmployee.getId());
+            PaySlipServiceImpl paysePaySlipServiceImpl = new PaySlipServiceImpl();
+            PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(allEmployee.getId());
+            PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails, allEmployee.getId());
+            paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
+            try {
+                paySlipRepository.save(paySlip);
+            } catch (Exception ex) {
+                log.error("Failed to save Pay Slip " + ex.getLocalizedMessage());
+            }
+        }
+        return DtoMapper.toDtoList(paySlipRepository.findAll(), PaySlipDto.class);
+    }
+
+    public PaySlip createPaySlipObject(PayDetailsDto employeePayDetails, long employeeId) {
+        PaySlip paySlip = new PaySlip();
+        Map<String, Double> returnDeductionsAndNetPay = NetPayCalculator.returnDeductionsAndNetPay(employeePayDetails.getGrossSalary(), employeePayDetails.getTierOneRate(), employeePayDetails.getTierTwoRate(),
+                employeePayDetails.getTierThreeRate(), employeePayDetails.getPayeeRate());
+
+        paySlip.setDate(FormatDate.returnFormatedDate());
+        paySlip.setEmployeeId(employeeId);
+        paySlip.setTireOneContribution(returnDeductionsAndNetPay.get("tier1"));
+        paySlip.setTierTwoContribution(returnDeductionsAndNetPay.get("tier2"));
+        paySlip.setTierThreeContribution(returnDeductionsAndNetPay.get("tier3"));
+        paySlip.setPayeeContributions(returnDeductionsAndNetPay.get("payee"));
+        paySlip.setTotalDeductions(returnDeductionsAndNetPay.get("totalDeductions"));
+        paySlip.setNetSalary(returnDeductionsAndNetPay.get("netPay"));
+        return paySlip;
+    }
+
 }

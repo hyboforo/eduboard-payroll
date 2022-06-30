@@ -44,19 +44,19 @@ public class EmployeeController {
     }
     
     @GetMapping("/returnEmployee/{id}")
-    public EmployeeDto returnEmployee(@PathVariable("id") long Id){
-        return employeeService.getEmployeeById(Id);
+    public EmployeeDto returnEmployee(@PathVariable("id") long employeeId){
+        return employeeService.getEmployeeById(employeeId);
         
     }
     
     @PostMapping("/updateEmployee/{id}")
-    public EmployeeDto updateEmployee(@PathVariable("id") long Id, @RequestBody EmployeeDto applicantDto){
-        return employeeService.updateEmployee(Id, applicantDto);
+    public EmployeeDto updateEmployee(@PathVariable("id") long employeeId, @RequestBody EmployeeDto applicantDto){
+        return employeeService.updateEmployee(employeeId, applicantDto);
     }
     
     @GetMapping("/deleteEmployee/{id}")
-    public Response deleteEmployee(@PathVariable("id") long Id){
-        if(employeeService.deleteEmployee(Id)){
+    public Response deleteEmployee(@PathVariable("id") long employeeId){
+        if(employeeService.deleteEmployee(employeeId)){
             return Response.SUCCESSFUL;
         }else{
             return Response.FAILED;

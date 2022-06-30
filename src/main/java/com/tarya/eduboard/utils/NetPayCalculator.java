@@ -7,11 +7,13 @@ package com.tarya.eduboard.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author hybof
  */
+@Slf4j
 public class NetPayCalculator {
     
     
@@ -31,13 +33,13 @@ public class NetPayCalculator {
         double tier1Amount = 0;
         double tier2Amount = 0;
         double tier3Amount = 0;
-        tier1Amount = temp *(tier1Rate/100);
+        tier1Amount = (double)temp * returnRateInDecimal(tier1Rate);
         temp = temp - tier1Amount;
-        tier2Amount = temp * (tier2Rate/100);
+        tier2Amount = (double)temp * returnRateInDecimal(tier2Rate);        
         temp = temp - tier2Amount;
-        tier3Amount = temp * (tier3Rate/100);
+        tier3Amount = (double)temp * returnRateInDecimal(tier3Rate);
         temp = temp - tier3Amount;
-        payeeAmount = temp * (payeeRate/100);
+        payeeAmount = (double)temp * returnRateInDecimal(payeeRate); 
         temp = temp - payeeAmount;
         double totalDeductions = tier1Amount + tier2Amount + tier3Amount + payeeAmount; 
         deductionsAndNetPay.put("tier1", tier1Amount);
@@ -46,7 +48,13 @@ public class NetPayCalculator {
         deductionsAndNetPay.put("payee", payeeAmount);
         deductionsAndNetPay.put("totalDeductions", totalDeductions);
         deductionsAndNetPay.put("netPay", temp);
+        log.info("Net pay "+temp);
         return deductionsAndNetPay;   
     }
+    
+    public static double returnRateInDecimal(int rate){
+        return (double)rate/100;
+    }
+    
     
 }

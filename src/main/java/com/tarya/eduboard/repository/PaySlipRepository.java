@@ -7,6 +7,7 @@ package com.tarya.eduboard.repository;
 
 import com.tarya.eduboard.model.PaySlip;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  *
@@ -14,5 +15,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface PaySlipRepository extends MongoRepository<PaySlip, Long>{
     
-    PaySlip getPaySlipByEmployeeId(long Id);
+    @Query("{'employee_id' : ?0}")
+    PaySlip findBy(long Id);
 }

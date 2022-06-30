@@ -7,6 +7,7 @@ package com.tarya.eduboard.repository;
 
 import com.tarya.eduboard.model.PayDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  *
@@ -14,7 +15,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface PayDetailsRepository extends MongoRepository<PayDetails, Long>{
     
-    PayDetails getPayDetailsByEmployeeId(long Id);
+    @Query("{'employee_id' : ?0}")
+    PayDetails findBy(long Id);
         
     
     

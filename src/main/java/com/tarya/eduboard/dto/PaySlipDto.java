@@ -19,11 +19,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaySlipDto {
     
-    private long Id;
+    private long id;
     private String date;
     private double tireOneContribution;
     private double tierTwoContribution;
     private double tierThreeContribution;
+    private double payeeContributions;
     private double totalDeductions;
     private double netSalary;
     private long employeeId; 

@@ -14,8 +14,10 @@ import java.util.List;
  */
 public interface PayDetailsService {
     
-    PayDetailsDto createPayDetails(PayDetailsDto newPayDetails);
+    PayDetailsDto createPayDetails(long employeeId, PayDetailsDto newPayDetails);
     List<PayDetailsDto> getAllPayDetails ();
-    PayDetailsDto getPayDetailsByEmployeeId(long Id);
+    PayDetailsDto getPayDetailsByEmployeeId(long employeeId);
+    PayDetailsDto updateEmployeePayDetails(long employeeId, PayDetailsDto updatePayDetails);
+    
     
 }

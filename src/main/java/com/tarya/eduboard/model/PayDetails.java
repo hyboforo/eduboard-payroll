@@ -30,18 +30,23 @@ public class PayDetails {
 
     @Id
     private long id;
+    @Field("employee_id")
+    private long employeeId;
+    @Field("first_name")
+    private String employeeFirstName;
+    @Field("last_name")
+    private String employeeLastName;
     @Field("gross_pay")
     private double grossSalary;
     @Field("payee_rate")
     private int payeeRate;
     @Field("tier1_rate")
-    private int tierRate;
+    private int tierOneRate;
     @Field("tier2_rate")
     private int tierTwoRate;
     @Field("tier3_rate")
     private int tierThreeRate;
-    @Field("employee_id")
-    private long employeeId;
+    
     private String bank;
 
 }
