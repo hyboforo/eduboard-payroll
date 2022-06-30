@@ -38,7 +38,7 @@ public class PaySlipController {
         return paySlipService.getPaySlipByEmployeeId(employeeId);
     }
     
-    @GetMapping("/payAllEmployee")
+    @GetMapping("/payAllEmployees")
     public List<PaySlipDto> payAllEmployee(){
        return paySlipService.createPaySlips();
     }
