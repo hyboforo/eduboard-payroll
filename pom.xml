@@ -14,7 +14,7 @@
     <name>payroll</name>
     <description>Employee Payroll System</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -51,7 +51,8 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency><!--
--->        <dependency>
+-->        
+        <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>

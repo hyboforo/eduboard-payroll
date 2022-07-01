@@ -55,7 +55,7 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "[{\"id\": 2,\"firstName\": \"Hanan\",\"lastName\": \"Yaro\",\"email\": \"yaro@gmail.com\",\"role\": \"Admin\"}]";
+        String expected = "[{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}]";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
@@ -73,11 +73,7 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        MockHttpServletResponse response = result.getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-
-        String expected = "{\"id\": 2,\"firstName\": \"Hanan\",\"lastName\": \"Yaro\",\"email\": \"yaro@gmail.com\",\"role\": \"Admin\"}";
+        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
@@ -95,9 +91,7 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        MockHttpServletResponse response = result.getResponse();
-
-        String expected = "{\"id\": 2,\"firstName\": \"Hanan\",\"lastName\": \"Yaro\",\"email\": \"yaro@gmail.com\",\"role\": \"Admin\"}";
+        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
@@ -127,7 +121,7 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{\"id\": 2,\"firstName\": \"Hanan\",\"lastName\": \"Yaro\",\"email\": \"yaro@gmail.com\",\"role\": \"Admin\"}";
+        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

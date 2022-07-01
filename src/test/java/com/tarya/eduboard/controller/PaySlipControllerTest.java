@@ -7,7 +7,8 @@ package com.tarya.eduboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarya.eduboard.dto.PayDetailsDto;
-import com.tarya.eduboard.service.PayDetailsService;
+import com.tarya.eduboard.dto.PaySlipDto;
+import com.tarya.eduboard.service.PaySlipService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -32,83 +33,83 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
  * @author hybof
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = PayDetailsController.class)
-public class PayDetailsControllerTest {
+@WebMvcTest(value = PaySlipController.class)
+public class PaySlipControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
     @MockBean
-    private PayDetailsService payDetailsService;
+    private PaySlipService paySlipService;
 
     @Test
-    public void getAllPayDetails() throws Exception {
-        PayDetailsDto payDetailsDto = new PayDetailsDto(1, 3, "Baba", "Salifu", 2000, 25, 5, 10, 6, "Stanbic");
-        List<PayDetailsDto> allPayDetails = Arrays.asList(payDetailsDto);
+    public void getAllPaySlips() throws Exception {
+        PaySlipDto paySlipDto = new PaySlipDto(1, "2022-06-30", 100, 190, 273, 359, 922, 1077, 3);
+        List<PaySlipDto> allPaySlips = Arrays.asList(paySlipDto);
 
-        Mockito.when(payDetailsService.getAllPayDetails()).thenReturn(allPayDetails);
+        Mockito.when(paySlipService.getAllPaySlips()).thenReturn(allPaySlips);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/payDetails").accept(
+                "/paySlip").accept(
                         MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "[{id:1,employeeId:3,employeeFirstName:Baba,employeeLastName:Salifu,grossSalary:2000,payeeRate:25,tierOneRate:5,tierTwoRate:10,tierThreeRate: 6,bank:Stanbic}]";
+        String expected = "[{id:1,date:2022-06-30,tireOneContribution:100,tierTwoContribution:190,tierThreeContribution:273,payeeContributions:359,totalDeductions:922,netSalary:1077,employeeId:3}]";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void addPayDetails() throws Exception {
-        PayDetailsDto payDetailsDto = new PayDetailsDto(1, 3, "Baba", "Salifu", 2000, 25, 5, 10, 6, "Stanbic");
+    public void payEmployee() throws Exception {
+        PaySlipDto paySlipDto = new PaySlipDto(1, "2022-06-30", 100, 190, 273, 359, 922, 1077, 3);
 
-        Mockito.when(payDetailsService.createPayDetails(Mockito.anyLong(), Mockito.any(PayDetailsDto.class))).thenReturn(payDetailsDto);
+        Mockito.when(paySlipService.createPaySlip(Mockito.anyLong())).thenReturn(paySlipDto);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/payDetails/savePayDetails/1")
-                .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(payDetailsDto))
+                .get("/paySlip/payEmployee/1")
+                .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(paySlipDto))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{id:1,employeeId:3,employeeFirstName:Baba,employeeLastName:Salifu,grossSalary:2000,payeeRate:25,tierOneRate:5,tierTwoRate:10,tierThreeRate: 6,bank:Stanbic}";
+        String expected = "{id:1,date:2022-06-30,tireOneContribution:100,tierTwoContribution:190,tierThreeContribution:273,payeeContributions:359,totalDeductions:922,netSalary:1077,employeeId:3}";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void updatePayDetails() throws Exception {
-        PayDetailsDto payDetailsDto = new PayDetailsDto(1, 3, "Baba", "Salifu", 2000, 25, 5, 10, 6, "Stanbic");
-
-        Mockito.when(payDetailsService.updateEmployeePayDetails(Mockito.anyLong(), Mockito.any(PayDetailsDto.class))).thenReturn(payDetailsDto);
+    public void payAllEmployee() throws Exception {
+        PaySlipDto paySlipDto = new PaySlipDto(1, "2022-06-30", 100, 190, 273, 359, 922, 1077, 3);
+        List<PaySlipDto> allPaySlips = Arrays.asList(paySlipDto);
+        Mockito.when(paySlipService.createPaySlips()).thenReturn(allPaySlips);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/payDetails/updateEmployeePayDetails/1")
-                .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(payDetailsDto))
+                .get("/paySlip/payAllEmployees")
+                .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(paySlipDto))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{id:1,employeeId:3,employeeFirstName:Baba,employeeLastName:Salifu,grossSalary:2000,payeeRate:25,tierOneRate:5,tierTwoRate:10,tierThreeRate:6,bank:Stanbic}";
+        String expected = "[{id:1,date:2022-06-30,tireOneContribution:100,tierTwoContribution:190,tierThreeContribution:273,payeeContributions:359,totalDeductions:922,netSalary:1077,employeeId:3}]";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void getEmployee() throws Exception {
-        PayDetailsDto payDetailsDto = new PayDetailsDto(1, 3, "Baba", "Salifu", 2000, 25, 5, 10, 6, "Stanbic");
+    public void getEmployeePaySlip() throws Exception {
+        PaySlipDto paySlipDto = new PaySlipDto(1, "2022-06-30", 100, 190, 273, 359, 922, 1077, 3);
 
-        Mockito.when(payDetailsService.getPayDetailsByEmployeeId(Mockito.anyLong())).thenReturn(payDetailsDto);
+        Mockito.when(paySlipService.getPaySlipByEmployeeId(Mockito.anyLong())).thenReturn(paySlipDto);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/payDetails/returnEmployeePayDetails/1").accept(
+                "/paySlip/returnEmployeePaySlip/1").accept(
                         MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{id:1,employeeId:3,employeeFirstName:Baba,employeeLastName:Salifu,grossSalary:2000,payeeRate:25,tierOneRate:5,tierTwoRate:10,tierThreeRate:6,bank:Stanbic}";
+        String expected = "{id:1,date:2022-06-30,tireOneContribution:100,tierTwoContribution:190,tierThreeContribution:273,payeeContributions:359,totalDeductions:922,netSalary:1077,employeeId:3}";
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

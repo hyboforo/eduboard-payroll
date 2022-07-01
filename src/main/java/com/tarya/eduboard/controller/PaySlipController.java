@@ -5,7 +5,6 @@
  */
 package com.tarya.eduboard.controller;
 
-import com.tarya.eduboard.dto.PayDetailsDto;
 import com.tarya.eduboard.dto.PaySlipDto;
 import com.tarya.eduboard.service.PaySlipService;
 import java.util.List;

@@ -33,7 +33,7 @@ public class PayDetailsController {
     @Autowired
     private PayDetailsService payDetailsService;
     
-    @PostMapping("/{id}")
+    @PostMapping("/savePayDetails/{id}")
     public ResponseEntity<PayDetailsDto> savePayDetails(@PathVariable("id") long employeeId, @RequestBody PayDetailsDto newPayDetails){
         PayDetailsDto createdPayDetails = payDetailsService.createPayDetails(employeeId, newPayDetails);
         return new ResponseEntity<PayDetailsDto>(createdPayDetails,HttpStatus.CREATED);
