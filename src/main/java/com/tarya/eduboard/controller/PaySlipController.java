@@ -7,7 +7,6 @@ package com.tarya.eduboard.controller;
 
 import com.tarya.eduboard.dto.PaySlipDto;
 import com.tarya.eduboard.service.PaySlipService;
-import com.tarya.eduboard.utils.Response;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class PaySlipController {
     public ResponseEntity<PaySlipDto> employeePaySlip(@PathVariable("id") long employeeId){
         PaySlipDto paySlipByEmployeeId = paySlipService.getPaySlipByEmployeeId(employeeId);
         if(paySlipByEmployeeId == null){
-          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);  
+          return new ResponseEntity<PaySlipDto>(paySlipByEmployeeId,HttpStatus.OK);  
         }
         return new ResponseEntity<PaySlipDto>(paySlipByEmployeeId,HttpStatus.OK);
     }
@@ -50,7 +49,7 @@ public class PaySlipController {
     public ResponseEntity<List<PaySlipDto>> payAllEmployee(){
         List<PaySlipDto> createdPaySlips = paySlipService.createPaySlips();
         if(createdPaySlips == null){
-           return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+           return new ResponseEntity<List<PaySlipDto>>(createdPaySlips,HttpStatus.OK); 
         }
         return new ResponseEntity<List<PaySlipDto>>(createdPaySlips,HttpStatus.OK);
     }
@@ -59,7 +58,7 @@ public class PaySlipController {
     public ResponseEntity<PaySlipDto> payEmployee(@PathVariable("id") long employeeId){
         PaySlipDto createdPaySlip = paySlipService.createPaySlip(employeeId);
         if(createdPaySlip == null){
-           return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+           return new ResponseEntity<PaySlipDto>(createdPaySlip,HttpStatus.OK); 
         }
         return new ResponseEntity<PaySlipDto>(createdPaySlip,HttpStatus.OK);
         

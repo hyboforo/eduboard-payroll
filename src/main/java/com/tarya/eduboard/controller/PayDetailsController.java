@@ -5,9 +5,7 @@
  */
 package com.tarya.eduboard.controller;
 
-import com.tarya.eduboard.dto.EmployeeDto;
 import com.tarya.eduboard.dto.PayDetailsDto;
-import com.tarya.eduboard.service.EmployeeService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class PayDetailsController {
     public ResponseEntity<PayDetailsDto> returnEmployeePayDetails(@PathVariable("id") long employeeId){
         PayDetailsDto payDetailsByEmployeeId = payDetailsService.getPayDetailsByEmployeeId(employeeId);
         if(payDetailsByEmployeeId == null){
-            return new ResponseEntity<>(payDetailsByEmployeeId,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<PayDetailsDto>(payDetailsByEmployeeId,HttpStatus.OK);
         }
         return new ResponseEntity<PayDetailsDto>(payDetailsByEmployeeId,HttpStatus.OK);
     }
@@ -53,7 +51,7 @@ public class PayDetailsController {
     public ResponseEntity<PayDetailsDto> updateEmployeePayDetails(@PathVariable("id") long employeeId, @RequestBody PayDetailsDto updatePayDetails){
         PayDetailsDto updatedEmployeePayDetails = payDetailsService.updateEmployeePayDetails(employeeId, updatePayDetails);
         if(updatedEmployeePayDetails == null){
-          return new ResponseEntity<>(updatedEmployeePayDetails,HttpStatus.BAD_REQUEST);  
+          return new ResponseEntity<PayDetailsDto>(updatedEmployeePayDetails,HttpStatus.OK);  
         }
         return new ResponseEntity<PayDetailsDto>(updatedEmployeePayDetails,HttpStatus.OK);
     }
