@@ -93,8 +93,14 @@ public class PaySlipServiceImpl implements PaySlipService {
             log.info("Employee ID is " + allEmployee.getId());
             PaySlipServiceImpl paysePaySlipServiceImpl = new PaySlipServiceImpl();
             PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(allEmployee.getId());
-            PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails);
-            paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
+            PaySlip paySlip = null;
+            try {
+                paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails);
+                paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
+            } catch (Exception ex) {
+                log.error("Employee with ID "+allEmployee.getId()+ " has not been cleared for payment");
+            }
+            
             try {
                 paySlipRepository.save(paySlip);
             } catch (Exception ex) {

@@ -5,13 +5,20 @@
  */
 package com.tarya.eduboard.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author hybof
  */
-public enum Response {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class OperationResult {
+    private Response operationalResponse;
+    Object responseBody;
     
-    OPERATION_SUCCESSFUL,
-    OPERATION_FAILED
     
 }

@@ -7,6 +7,9 @@ package com.tarya.eduboard.controller;
 
 import com.tarya.eduboard.dto.PaySlipDto;
 import com.tarya.eduboard.service.PaySlipService;
+import com.tarya.eduboard.utils.OperationResult;
+import com.tarya.eduboard.utils.Response;
+import com.tarya.eduboard.utils.ResponseContructor;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,48 +24,61 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author hybof
  */
-
 @Slf4j
 @RestController
 @RequestMapping("paySlip")
 public class PaySlipController {
-    
+
     @Autowired
     private PaySlipService paySlipService;
-    
+
     @GetMapping()
-    public ResponseEntity<List<PaySlipDto>> getAllPaySlips(){
+    public ResponseEntity<OperationResult> getAllPaySlips() {
+        ResponseContructor responseContructor = new ResponseContructor();
         List<PaySlipDto> allPaySlips = paySlipService.getAllPaySlips();
-        return new ResponseEntity<List<PaySlipDto>>(allPaySlips,HttpStatus.OK);
+        if (allPaySlips == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, allPaySlips);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+        }
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, allPaySlips);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
     }
-    
+
     @GetMapping("/returnEmployeePaySlip/{id}")
-    public ResponseEntity<PaySlipDto> employeePaySlip(@PathVariable("id") long employeeId){
+    public ResponseEntity<OperationResult> employeePaySlip(@PathVariable("id") long employeeId) {
+        ResponseContructor responseContructor = new ResponseContructor();
         PaySlipDto paySlipByEmployeeId = paySlipService.getPaySlipByEmployeeId(employeeId);
-        if(paySlipByEmployeeId == null){
-          return new ResponseEntity<PaySlipDto>(paySlipByEmployeeId,HttpStatus.OK);  
+        if (paySlipByEmployeeId == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, paySlipByEmployeeId);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<PaySlipDto>(paySlipByEmployeeId,HttpStatus.OK);
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, paySlipByEmployeeId);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
     }
-    
+
     @GetMapping("/payAllEmployees")
-    public ResponseEntity<List<PaySlipDto>> payAllEmployee(){
+    public ResponseEntity<OperationResult> payAllEmployee() {
+        ResponseContructor responseContructor = new ResponseContructor();
         List<PaySlipDto> createdPaySlips = paySlipService.createPaySlips();
-        if(createdPaySlips == null){
-           return new ResponseEntity<List<PaySlipDto>>(createdPaySlips,HttpStatus.OK); 
+        if (createdPaySlips == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, createdPaySlips);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<List<PaySlipDto>>(createdPaySlips,HttpStatus.OK);
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, createdPaySlips);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
     }
-    
+
     @GetMapping("/payEmployee/{id}")
-    public ResponseEntity<PaySlipDto> payEmployee(@PathVariable("id") long employeeId){
+    public ResponseEntity<OperationResult> payEmployee(@PathVariable("id") long employeeId) {
+         ResponseContructor responseContructor = new ResponseContructor();
         PaySlipDto createdPaySlip = paySlipService.createPaySlip(employeeId);
-        if(createdPaySlip == null){
-           return new ResponseEntity<PaySlipDto>(createdPaySlip,HttpStatus.OK); 
+        if (createdPaySlip == null) {
+             OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, createdPaySlip);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<PaySlipDto>(createdPaySlip,HttpStatus.OK);
-        
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, createdPaySlip);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+
     }
-    
-    
+
 }

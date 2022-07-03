@@ -8,6 +8,9 @@ package com.tarya.eduboard.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarya.eduboard.dto.EmployeeDto;
 import com.tarya.eduboard.service.EmployeeService;
+import com.tarya.eduboard.utils.OperationResult;
+import com.tarya.eduboard.utils.Response;
+import com.tarya.eduboard.utils.ResponseContructor;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -55,13 +58,15 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "[{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}]";
+        String expected = "{operationalResponse:OPERATION_SUCCESSFUL, responseBody:[{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}]}";
+
 
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
     public void addEmployee() throws Exception {
+        
         EmployeeDto employeeDto = new EmployeeDto(2, "Hanan", "Yaro", "yaro@gmail.com", "Admin");
 
         Mockito.when(employeeService.createEmployee(Mockito.any(EmployeeDto.class))).thenReturn(employeeDto);
@@ -73,13 +78,14 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
-
+        String expected = "{operationalResponse:OPERATION_SUCCESSFUL,responseBody:{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}}";
+        
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
     public void updateEmployee() throws Exception {
+        
         EmployeeDto employeeDto = new EmployeeDto(2, "Hanan", "Yaro", "yaro@gmail.com", "Admin");
 
         Mockito.when(employeeService.updateEmployee(Mockito.anyLong(), Mockito.any(EmployeeDto.class))).thenReturn(employeeDto);
@@ -91,21 +97,22 @@ public class EmployeeControllerTests {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
-
+        String expected = "{operationalResponse:OPERATION_SUCCESSFUL,responseBody:{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}}";
+      
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    public void failedDelete() throws Exception {
-
+    public void delete() throws Exception {
+       
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/employee/deleteEmployee/2").accept(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
         MockHttpServletResponse response = result.getResponse();
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
+        String expected = "{operationalResponse:OPERATION_SUCCESSFUL,responseBody:null}";
+        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(),false);
 
     }
 
@@ -120,9 +127,7 @@ public class EmployeeControllerTests {
                         MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        String expected = "{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}";
-
+        String expected = "{operationalResponse:OPERATION_SUCCESSFUL,responseBody:{id:2,firstName:Hanan,lastName:Yaro,email:yaro@gmail.com,role:Admin}}";
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
 

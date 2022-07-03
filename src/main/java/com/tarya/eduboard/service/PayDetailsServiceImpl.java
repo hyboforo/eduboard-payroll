@@ -70,7 +70,7 @@ public class PayDetailsServiceImpl implements PayDetailsService {
     public PayDetailsDto getPayDetailsByEmployeeId(long employeeId) {
         PayDetailsDto payDetailDto = null;
         try {
-            DtoMapper.toDto(payDetailsRepository.findBy(employeeId), PayDetailsDto.class);
+            payDetailDto = DtoMapper.toDto(payDetailsRepository.findBy(employeeId), PayDetailsDto.class);
         } catch (Exception ex) {
             log.error("Failed to find pay details " + ex.getLocalizedMessage());
             return null;

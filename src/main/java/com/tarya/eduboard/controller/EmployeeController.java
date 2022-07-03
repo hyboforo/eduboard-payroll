@@ -5,7 +5,6 @@
  */
 package com.tarya.eduboard.controller;
 
-
 import com.tarya.eduboard.dto.EmployeeDto;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.tarya.eduboard.service.EmployeeService;
+import com.tarya.eduboard.utils.OperationResult;
 import com.tarya.eduboard.utils.Response;
+import com.tarya.eduboard.utils.ResponseContructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,56 +32,71 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("employee")
 public class EmployeeController {
-    
+
     @Autowired
     private EmployeeService employeeService;
-    
-    
+
     @PostMapping("/saveEmployee")
-    public ResponseEntity<EmployeeDto> saveEmployee(@RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<OperationResult> saveEmployee(@RequestBody EmployeeDto employeeDto) {
+        ResponseContructor responseContructor = new ResponseContructor();
         EmployeeDto createdEmployee = employeeService.createEmployee(employeeDto);
-        if(createdEmployee == null){
-            return new ResponseEntity<EmployeeDto>(createdEmployee,HttpStatus.OK);
+        if (createdEmployee == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, createdEmployee);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<EmployeeDto>(createdEmployee,HttpStatus.CREATED);
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, createdEmployee);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.CREATED);
     }
-    
+
     @GetMapping()
-    public ResponseEntity<List<EmployeeDto>> getAllEEmployees(){
+    public ResponseEntity<OperationResult> getAllEEmployees() {
+        ResponseContructor responseContructor = new ResponseContructor();
         List<EmployeeDto> allEmployees = employeeService.getAllEmployees();
-        return new ResponseEntity<List<EmployeeDto>>(allEmployees,HttpStatus.OK);
-        
+        if (allEmployees == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, allEmployees);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+        }
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, allEmployees);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+
     }
-    
+
     @GetMapping("/returnEmployee/{id}")
-    public ResponseEntity<EmployeeDto> returnEmployee(@PathVariable("id") long employeeId){
+    public ResponseEntity<OperationResult> returnEmployee(@PathVariable("id") long employeeId) {
+        ResponseContructor responseContructor = new ResponseContructor();
         EmployeeDto returnedEmployee = employeeService.getEmployeeById(employeeId);
-        if(returnedEmployee == null){
-          return new ResponseEntity<EmployeeDto>(returnedEmployee,HttpStatus.OK);  
+        if (returnedEmployee == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, returnedEmployee);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<EmployeeDto>(returnedEmployee,HttpStatus.OK);
-        
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, returnedEmployee);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+
     }
-    
+
     @PutMapping("/updateEmployee/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") long employeeId, @RequestBody EmployeeDto applicantDto){
+    public ResponseEntity<OperationResult> updateEmployee(@PathVariable("id") long employeeId, @RequestBody EmployeeDto applicantDto) {
+        ResponseContructor responseContructor = new ResponseContructor();
         EmployeeDto updatedEmployee = employeeService.updateEmployee(employeeId, applicantDto);
-        if(updatedEmployee == null){
-           return new ResponseEntity<EmployeeDto>(updatedEmployee,HttpStatus.OK); 
+        if (updatedEmployee == null) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_FAILED, updatedEmployee);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<EmployeeDto>(updatedEmployee,HttpStatus.OK);
+        OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, updatedEmployee);
+        return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/deleteEmployee/{id}")
-    public ResponseEntity<Response> deleteEmployee(@PathVariable("id") long employeeId){
-        if(employeeService.deleteEmployee(employeeId)){
-            return new ResponseEntity<Response>(Response.SUCCESSFUL,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<Response>(Response.FAILED,HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<OperationResult> deleteEmployee(@PathVariable("id") long employeeId) {
+        ResponseContructor responseContructor = new ResponseContructor();
+        if (employeeService.deleteEmployee(employeeId)) {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, null);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.OK);
+        } else {
+            OperationResult response = responseContructor.ContructResponse(Response.OPERATION_SUCCESSFUL, null);
+            return new ResponseEntity<OperationResult>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
+
     }
-    
-    
-    
+
 }

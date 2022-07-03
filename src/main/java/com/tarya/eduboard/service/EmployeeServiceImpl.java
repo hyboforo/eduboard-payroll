@@ -112,7 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         
         List<EmployeeDto> allEmployeeDto = null;
         try{
-        DtoMapper.toDtoList(employeeRepository.findAll(), EmployeeDto.class);
+        allEmployeeDto = DtoMapper.toDtoList(employeeRepository.findAll(), EmployeeDto.class);
         }catch(Exception ex){
          log.error("Failed to find Employees "+ex.getLocalizedMessage());
          return allEmployeeDto;
