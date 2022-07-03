@@ -20,6 +20,8 @@ import com.tarya.eduboard.service.EmployeeService;
 import com.tarya.eduboard.utils.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  *
@@ -54,13 +56,13 @@ public class EmployeeController {
         
     }
     
-    @PostMapping("/updateEmployee/{id}")
+    @PutMapping("/updateEmployee/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") long employeeId, @RequestBody EmployeeDto applicantDto){
         EmployeeDto updatedEmployee = employeeService.updateEmployee(employeeId, applicantDto);
         return new ResponseEntity<EmployeeDto>(updatedEmployee,HttpStatus.OK);
     }
     
-    @GetMapping("/deleteEmployee/{id}")
+    @DeleteMapping("/deleteEmployee/{id}")
     public ResponseEntity<Response> deleteEmployee(@PathVariable("id") long employeeId){
         if(employeeService.deleteEmployee(employeeId)){
             return new ResponseEntity<Response>(Response.SUCCESSFUL,HttpStatus.OK);

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,7 @@ public class PayDetailsController {
         return new ResponseEntity<PayDetailsDto>(payDetailsByEmployeeId,HttpStatus.OK);
     }
     
-    @PostMapping("/updateEmployeePayDetails/{id}")
+    @PutMapping("/updateEmployeePayDetails/{id}")
     public ResponseEntity<PayDetailsDto> updateEmployeePayDetails(@PathVariable("id") long employeeId, @RequestBody PayDetailsDto updatePayDetails){
         PayDetailsDto updatedEmployeePayDetails = payDetailsService.updateEmployeePayDetails(employeeId, updatePayDetails);
         return new ResponseEntity<PayDetailsDto>(updatedEmployeePayDetails,HttpStatus.OK);

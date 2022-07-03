@@ -85,7 +85,7 @@ public class PayDetailsControllerTest {
         Mockito.when(payDetailsService.updateEmployeePayDetails(Mockito.anyLong(), Mockito.any(PayDetailsDto.class))).thenReturn(payDetailsDto);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/payDetails/updateEmployeePayDetails/1")
+                .put("/payDetails/updateEmployeePayDetails/1")
                 .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(payDetailsDto))
                 .contentType(MediaType.APPLICATION_JSON);
 

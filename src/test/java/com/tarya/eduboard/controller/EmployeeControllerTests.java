@@ -85,7 +85,7 @@ public class EmployeeControllerTests {
         Mockito.when(employeeService.updateEmployee(Mockito.anyLong(), Mockito.any(EmployeeDto.class))).thenReturn(employeeDto);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/employee/updateEmployee/2")
+                .put("/employee/updateEmployee/2")
                 .accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsBytes(employeeDto))
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -98,9 +98,9 @@ public class EmployeeControllerTests {
 
     @Test
     public void failedDelete() throws Exception {
-        
+
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/employee/deleteEmployee/2").accept(MediaType.APPLICATION_JSON);
+                .delete("/employee/deleteEmployee/2").accept(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
