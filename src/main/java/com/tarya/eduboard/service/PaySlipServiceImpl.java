@@ -31,7 +31,7 @@ public class PaySlipServiceImpl implements PaySlipService {
     @Autowired
     private PaySlipRepository paySlipRepository;
     @Autowired
-    private payDetailsService payDetailsService;
+    private PayDetailsService payDetailsService;
     @Autowired
     private EmployeeService employeeService;
     @Autowired
