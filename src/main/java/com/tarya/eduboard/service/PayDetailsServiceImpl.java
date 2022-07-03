@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service
-public class PayDetailsServiceImpl implements PayDetailsService {
+public class PayDetailsServiceImpl implements payDetailsService {
 
     @Autowired
     private PayDetailsRepository payDetailsRepository;
