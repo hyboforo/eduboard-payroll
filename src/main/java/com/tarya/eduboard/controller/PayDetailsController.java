@@ -43,12 +43,18 @@ public class PayDetailsController {
     @GetMapping("/returnEmployeePayDetails/{id}")
     public ResponseEntity<PayDetailsDto> returnEmployeePayDetails(@PathVariable("id") long employeeId){
         PayDetailsDto payDetailsByEmployeeId = payDetailsService.getPayDetailsByEmployeeId(employeeId);
+        if(payDetailsByEmployeeId == null){
+            return new ResponseEntity<>(payDetailsByEmployeeId,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<PayDetailsDto>(payDetailsByEmployeeId,HttpStatus.OK);
     }
     
     @PutMapping("/updateEmployeePayDetails/{id}")
     public ResponseEntity<PayDetailsDto> updateEmployeePayDetails(@PathVariable("id") long employeeId, @RequestBody PayDetailsDto updatePayDetails){
         PayDetailsDto updatedEmployeePayDetails = payDetailsService.updateEmployeePayDetails(employeeId, updatePayDetails);
+        if(updatedEmployeePayDetails == null){
+          return new ResponseEntity<>(updatedEmployeePayDetails,HttpStatus.BAD_REQUEST);  
+        }
         return new ResponseEntity<PayDetailsDto>(updatedEmployeePayDetails,HttpStatus.OK);
     }
     

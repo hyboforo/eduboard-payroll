@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tarya.eduboard.repository.EmployeeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -36,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return Employee the saved applicant 
      * @see Employee
      */
+    @Transactional
     @Override
     public EmployeeDto createEmployee(EmployeeDto newEmployee) {
         newEmployee.setId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
@@ -57,6 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param updateApplicant the Employee object that will replace the existing applicant
      * @return updated Employee returns the updated Employee
      */
+    @Transactional
     @Override
     public EmployeeDto updateEmployee(long employeeId, EmployeeDto newEmployee) {
         EmployeeDto updateEmployeeDto = null;
@@ -106,7 +109,14 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public List<EmployeeDto> getAllEmployees() {
-        List<EmployeeDto> allEmployeeDto = DtoMapper.toDtoList(employeeRepository.findAll(), EmployeeDto.class);
+        
+        List<EmployeeDto> allEmployeeDto = null;
+        try{
+        DtoMapper.toDtoList(employeeRepository.findAll(), EmployeeDto.class);
+        }catch(Exception ex){
+         log.error("Failed to find Employees "+ex.getLocalizedMessage());
+         return allEmployeeDto;
+        }
         return allEmployeeDto;
     }
 

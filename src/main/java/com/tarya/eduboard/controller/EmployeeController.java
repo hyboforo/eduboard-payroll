@@ -39,6 +39,9 @@ public class EmployeeController {
     @PostMapping("/saveEmployee")
     public ResponseEntity<EmployeeDto> saveEmployee(@RequestBody EmployeeDto employeeDto){
         EmployeeDto createdEmployee = employeeService.createEmployee(employeeDto);
+        if(createdEmployee == null){
+            return new ResponseEntity<>(createdEmployee,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<EmployeeDto>(createdEmployee,HttpStatus.CREATED);
     }
     
@@ -52,6 +55,9 @@ public class EmployeeController {
     @GetMapping("/returnEmployee/{id}")
     public ResponseEntity<EmployeeDto> returnEmployee(@PathVariable("id") long employeeId){
         EmployeeDto returnedEmployee = employeeService.getEmployeeById(employeeId);
+        if(returnedEmployee == null){
+          return new ResponseEntity<>(returnedEmployee,HttpStatus.BAD_REQUEST);  
+        }
         return new ResponseEntity<EmployeeDto>(returnedEmployee,HttpStatus.OK);
         
     }
@@ -59,6 +65,9 @@ public class EmployeeController {
     @PutMapping("/updateEmployee/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") long employeeId, @RequestBody EmployeeDto applicantDto){
         EmployeeDto updatedEmployee = employeeService.updateEmployee(employeeId, applicantDto);
+        if(updatedEmployee == null){
+           return new ResponseEntity<>(updatedEmployee,HttpStatus.BAD_REQUEST); 
+        }
         return new ResponseEntity<EmployeeDto>(updatedEmployee,HttpStatus.OK);
     }
     

@@ -43,36 +43,57 @@ public class PaySlipServiceImpl implements PaySlipService {
         PaySlipDto savedPaySlip = null;
         PaySlipServiceImpl paysePaySlipServiceImpl = new PaySlipServiceImpl();
         PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(employeeId);
-        PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails, employeeId);
+        if (employeePayDetails == null) {
+            log.info("Cannot process pay, Empoyee with ID " + employeeId + " cannot be found");
+            return null;
+        }
+        PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails);
         paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
         try {
             savedPaySlip = DtoMapper.toDto(paySlipRepository.save(paySlip), PaySlipDto.class);
         } catch (Exception ex) {
             log.error("Failed to save Pay Slip " + ex.getLocalizedMessage());
+            return savedPaySlip;
         }
         return savedPaySlip;
     }
 
     @Override
     public List<PaySlipDto> getAllPaySlips() {
-        List<PaySlipDto> paySlipDtos = DtoMapper.toDtoList(paySlipRepository.findAll(), PaySlipDto.class);
+        List<PaySlipDto> paySlipDtos = null;
+        try {
+            paySlipDtos = DtoMapper.toDtoList(paySlipRepository.findAll(), PaySlipDto.class);
+        } catch (Exception ex) {
+            log.error("Failed to find pay details " + ex.getLocalizedMessage());
+            return paySlipDtos;
+        }
         return paySlipDtos;
     }
 
     @Override
     public PaySlipDto getPaySlipByEmployeeId(long Id) {
-        PaySlipDto paySlipDto = DtoMapper.toDto(paySlipRepository.findBy(Id), PaySlipDto.class);
+        PaySlipDto paySlipDto = null;
+        try {
+            paySlipDto = DtoMapper.toDto(paySlipRepository.findBy(Id), PaySlipDto.class);
+        } catch (Exception ex) {
+            log.error("Find to find pay slip " + ex.getLocalizedMessage());
+            return paySlipDto;
+        }
         return paySlipDto;
     }
 
     @Override
     public List<PaySlipDto> createPaySlips() {
         List<EmployeeDto> allEmployees = employeeService.getAllEmployees();
+        if (allEmployees == null) {
+            log.info("Cannot process pay, No employee found");
+            return null;
+        }
         for (EmployeeDto allEmployee : allEmployees) {
             log.info("Employee ID is " + allEmployee.getId());
             PaySlipServiceImpl paysePaySlipServiceImpl = new PaySlipServiceImpl();
             PayDetailsDto employeePayDetails = payDetailsService.getPayDetailsByEmployeeId(allEmployee.getId());
-            PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails, allEmployee.getId());
+            PaySlip paySlip = paysePaySlipServiceImpl.createPaySlipObject(employeePayDetails);
             paySlip.setId(sequenceGeneratorService.generateSequence(PaySlip.SEQUENCE_NAME));
             try {
                 paySlipRepository.save(paySlip);
@@ -80,16 +101,23 @@ public class PaySlipServiceImpl implements PaySlipService {
                 log.error("Failed to save Pay Slip " + ex.getLocalizedMessage());
             }
         }
-        return DtoMapper.toDtoList(paySlipRepository.findAll(), PaySlipDto.class);
+        List<PaySlipDto> payslips = null;
+        try {
+            payslips = DtoMapper.toDtoList(paySlipRepository.findAll(), PaySlipDto.class);
+        } catch (Exception ex) {
+            log.error("Failed to retrieve pay slips "+ex.getLocalizedMessage());
+            return null;
+        }
+        return payslips;
     }
 
-    public PaySlip createPaySlipObject(PayDetailsDto employeePayDetails, long employeeId) {
+    public PaySlip createPaySlipObject(PayDetailsDto employeePayDetails) {
         PaySlip paySlip = new PaySlip();
         Map<String, Double> returnDeductionsAndNetPay = NetPayCalculator.returnDeductionsAndNetPay(employeePayDetails.getGrossSalary(), employeePayDetails.getTierOneRate(), employeePayDetails.getTierTwoRate(),
                 employeePayDetails.getTierThreeRate(), employeePayDetails.getPayeeRate());
 
         paySlip.setDate(FormatDate.returnFormatedDate());
-        paySlip.setEmployeeId(employeeId);
+        paySlip.setEmployeeId(employeePayDetails.getEmployeeId());
         paySlip.setTireOneContribution(returnDeductionsAndNetPay.get("tier1"));
         paySlip.setTierTwoContribution(returnDeductionsAndNetPay.get("tier2"));
         paySlip.setTierThreeContribution(returnDeductionsAndNetPay.get("tier3"));

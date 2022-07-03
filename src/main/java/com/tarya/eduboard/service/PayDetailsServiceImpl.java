@@ -23,21 +23,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 public class PayDetailsServiceImpl implements PayDetailsService {
-    
+
     @Autowired
     private PayDetailsRepository payDetailsRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private EmployeeService employeeService;
-    
+
     @Transactional
     @Override
     public PayDetailsDto createPayDetails(long employeeId, PayDetailsDto newPayDetails) {
         PayDetails savePayDetails = null;
         EmployeeDto returnedEmployeeDto = employeeService.getEmployeeById(employeeId);
-        if(returnedEmployeeDto == null){
-            log.error("Employee with ID "+employeeId+ " was not found. Cannt save Pay Details for Employee");
+        if (returnedEmployeeDto == null) {
+            log.error("Employee with ID " + employeeId + " was not found. Cannt save Pay Details for Employee");
             return null;
         }
         newPayDetails.setEmployeeId(employeeId);
@@ -52,17 +52,30 @@ public class PayDetailsServiceImpl implements PayDetailsService {
         }
         return DtoMapper.toDto(savePayDetails, PayDetailsDto.class);
     }
-    
+
     @Override
     public List<PayDetailsDto> getAllPayDetails() {
-        List<PayDetailsDto> payDetailDtos = DtoMapper.toDtoList(payDetailsRepository.findAll(), PayDetailsDto.class);
+        List<PayDetailsDto> payDetailDtos = null;
+        try {
+            payDetailDtos = DtoMapper.toDtoList(payDetailsRepository.findAll(), PayDetailsDto.class);
+        } catch (Exception ex) {
+            log.error("Failed to find pay details " + ex.getLocalizedMessage());
+            return null;
+        }
+
         return payDetailDtos;
     }
-    
+
     @Override
     public PayDetailsDto getPayDetailsByEmployeeId(long employeeId) {
-        PayDetailsDto payDetailDto = DtoMapper.toDto(payDetailsRepository.findBy(employeeId), PayDetailsDto.class);
-        return payDetailDto;        
+        PayDetailsDto payDetailDto = null;
+        try {
+            DtoMapper.toDto(payDetailsRepository.findBy(employeeId), PayDetailsDto.class);
+        } catch (Exception ex) {
+            log.error("Failed to find pay details " + ex.getLocalizedMessage());
+            return null;
+        }
+        return payDetailDto;
     }
 
     @Transactional
@@ -70,8 +83,8 @@ public class PayDetailsServiceImpl implements PayDetailsService {
     public PayDetailsDto updateEmployeePayDetails(long employeeId, PayDetailsDto updatePayDetails) {
         PayDetails updatedPayDetails = null;
         EmployeeDto returnedEmployeeDto = employeeService.getEmployeeById(employeeId);
-        if(returnedEmployeeDto == null){
-            log.error("Employee with ID "+employeeId+ " was not found. Cannot update Pay Details for Employee");
+        if (returnedEmployeeDto == null) {
+            log.error("Employee with ID " + employeeId + " was not found. Cannot update Pay Details for Employee");
             return null;
         }
         PayDetails toUpdate = payDetailsRepository.findBy(employeeId);
@@ -88,9 +101,7 @@ public class PayDetailsServiceImpl implements PayDetailsService {
             return null;
         }
         return DtoMapper.toDto(updatedPayDetails, PayDetailsDto.class);
-        
+
     }
-    
-    
-    
+
 }
