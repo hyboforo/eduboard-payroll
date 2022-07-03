@@ -7,7 +7,6 @@ package com.tarya.eduboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarya.eduboard.dto.PayDetailsDto;
-import com.tarya.eduboard.service.PayDetailsService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -26,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.tarya.eduboard.service.PayDetailsService;
 
 /**
  *
